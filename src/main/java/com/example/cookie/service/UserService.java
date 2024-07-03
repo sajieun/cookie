@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
-    public void login(
+    public String login(
             LoginRequest loginRequest,
             HttpServletResponse httpServletResponse
     ){
@@ -23,23 +23,13 @@ public class UserService {
         if (optionalUser.isPresent()) {
             var userDto = optionalUser.get();
 
-            Cookie cookie = null;
             if (userDto.getPassword().equals(pw)) {
-                // cookie 해당 정보를 저장
-                cookie = new Cookie("authorization-cookie", userDto.getId());
-                cookie.setDomain("localhost"); // naver.com , daum.net
-                // 밑에 두개는 업무할때 필수!
-                cookie.setHttpOnly(true); // 검사에서 cookie 값을 읽을 수 없도록 만들어준다.
-                cookie.setSecure(true); // https 에서만 쿠기가 되게끔 하겠다.
-
-                cookie.setPath("/");
-                cookie.setMaxAge(-1); // 연결된 동안만 사용하겠다.
-
+                return userDto.getId();
             }
-            httpServletResponse.addCookie(cookie);
 
         }else {
             throw new RuntimeException("User Not Found");
         }
+        return  null;
     }
 }

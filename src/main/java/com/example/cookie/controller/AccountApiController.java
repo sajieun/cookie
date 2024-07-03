@@ -14,11 +14,11 @@ public class AccountApiController {
     private final UserService userService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public void login(
+    public String login(
             @RequestBody
             LoginRequest loginRequest,
             HttpServletResponse httpServletResponse
     ){
-        userService.login(loginRequest,httpServletResponse);
+        return userService.login(loginRequest,httpServletResponse);
     }
 }
