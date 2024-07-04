@@ -7,10 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -39,4 +36,14 @@ public class UserApiController {
 
     }
 
+    @GetMapping("/me2")
+    public UserDto me2(
+            HttpServletRequest httpServletRequest,
+            @RequestHeader(name = "authorization", required = false) // 쿠키를 직접 받는 방법
+            String authorizationHeader
+    ) {
+        log.info("authorizationHeader : {}", authorizationHeader);
+        var optionalUserDto = userRepository.findById(authorizationHeader);
+        return optionalUserDto.get();
+    }
 }
